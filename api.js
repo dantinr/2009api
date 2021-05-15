@@ -61,6 +61,54 @@ app.post('/user/add',(req,res)=>{
     });
 })
 
+
+// goodslist
+app.get('/goods/list',(req,res)=>{
+    let sql = `select goods_id,goods_name,shop_price,number from p_cart limit 5`
+    connection.query(sql, function (error, results, fields) {
+        res.send(results)
+    });
+})
+
+//检测用户名
+app.get("/check/username",(req,res)=>{
+    console.log(req.query)
+    let sql = `select * from p_users where user_name='${req.query.name}'`
+    console.log("sql: ",sql)
+    connection.query(sql, function (error, results, fields) {
+
+        console.log("数据库记录： ",results)
+
+       if(results.length>0){        //已被占用
+           let response_data = {
+               errno: 40005,
+               msg: "用户名已被占用"
+           }
+           res.send(response_data)
+       }else{           // 可以使用
+           let response_data = {
+               errno: 0,
+               msg: "ok"
+           }
+           res.send(response_data)
+       }
+
+    });
+})
+
+app.get("/check/email",(req,res)=>{
+    console.log(req.query)
+    let sql = `select * from p_users where email='${req.query.email}'`
+    connection.query(sql, function (error, results, fields) {
+        if(results.length>0){        //
+            res.send()
+        }else{
+            res.send()
+        }
+
+    });
+})
+
 //监听端口
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
