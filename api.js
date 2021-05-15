@@ -96,16 +96,44 @@ app.get("/check/username",(req,res)=>{
     });
 })
 
+//检查Email
 app.get("/check/email",(req,res)=>{
     console.log(req.query)
     let sql = `select * from p_users where email='${req.query.email}'`
     connection.query(sql, function (error, results, fields) {
-        if(results.length>0){        //
-            res.send()
-        }else{
-            res.send()
+        if(results.length>0){        //已被占用
+            let response_data = {
+                errno: 40006,
+                msg: "Email已被占用"
+            }
+            res.send(response_data)
+        }else{           // 可以使用
+            let response_data = {
+                errno: 0,
+                msg: "ok"
+            }
+            res.send(response_data)
         }
+    });
+})
 
+//检查手机号
+app.get("/check/mobile",(req,res)=>{
+    let sql = `select * from p_users where email='${req.query.mobile}'`
+    connection.query(sql, function (error, results, fields) {
+        if(results.length>0){        //已被占用
+            let response_data = {
+                errno: 40007,
+                msg: "手机号已被占用"
+            }
+            res.send(response_data)
+        }else{           // 可以使用
+            let response_data = {
+                errno: 0,
+                msg: "ok"
+            }
+            res.send(response_data)
+        }
     });
 })
 
