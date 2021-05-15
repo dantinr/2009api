@@ -70,6 +70,26 @@ app.get('/goods/list',(req,res)=>{
     });
 })
 
+//用户注册接口
+app.post('/user/regist',(req,res)=>{
+    //接收 前台发送来的数据
+    console.log("接收到的注册信息：",req.body)
+    let sql = `insert into p_users (user_name,email,mobile,password) values ('${req.body.name}','${req.body.email}','${req.body.mobile}','${req.body.pass}')`
+    console.log(sql)
+    connection.query(sql, function (error, results, fields) {
+        console.log("错误: ",error)
+        console.log("insert 结果: ",results)
+        console.log("insert 影响的行数：",results.affectedRows)
+
+        if(results.affectedRows > 0){       //insert成功
+            res.send()
+        }else{          //失败
+            res.send()
+        }
+    });
+
+})
+
 //检测用户名
 app.get("/check/username",(req,res)=>{
     console.log(req.query)
@@ -135,6 +155,13 @@ app.get("/check/mobile",(req,res)=>{
             res.send(response_data)
         }
     });
+})
+
+//用户注册
+app.post('/user/reg',(req,res)=>{
+    console.log(req.body)
+    //用户信息入库
+
 })
 
 //监听端口
