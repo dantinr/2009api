@@ -62,11 +62,37 @@ app.post('/user/add',(req,res)=>{
 })
 
 
-// goodslist
+// 商品列表
 app.get('/goods/list',(req,res)=>{
     let sql = `select goods_id,goods_name,shop_price,number from p_cart limit 5`
     connection.query(sql, function (error, results, fields) {
         res.send(results)
+    });
+})
+
+// 修改购物车商品数量 +1
+app.put('/cart/number',(req,res)=>{
+    //接收 商品信息  商品id, number
+    let id = req.body.id
+    let sql = `update p_cart set number=number+1 where goods_id=${id}`
+    console.log(sql)
+    connection.query(sql, function (error, results, fields) {
+        //判断 sql语句 是否执行成功
+        console.log(error)
+        console.log(results)
+        if(results.affectedRows > 0){       //
+            let response_data = {
+                errno : 0,
+                msg: "ok"
+            }
+            res.send(response_data)
+        }else{          //失败
+            let response_data = {
+                errno : 40001,
+                msg: "更新失败"
+            }
+            res.send(response_data)
+        }
     });
 })
 
